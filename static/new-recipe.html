@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>New Recipe</title>
+</head>
+<body>
+    <h1>You provided a GET request to the new-recipe page!</h1>
+    <form id="recipe-form">
+        <label for="title">Title</label>
+        <input name="title" id="title" />
+        <label for="description">Description</label>
+        <textarea name="description" id="description"></textarea>
+
+        <div id="ingredient-container">
+            <h2>Ingredients:</h2>
+            <input class="ingredient" id="ingredient-1">
+            <button>x</button>
+            <button>+</button>
+        </div>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+<script>
+    const form = document.querySelector('#recipe-form');
+    form.addEventListener('submit', handleSubmit);
+
+    async function handleSubmit(e) {
+        e.preventDefault();
+
+        let form = e.currentTarget;
+
+        let children = form.elements;
+
+        const inputs_query = document.querySelectorAll("input");
+
+        let inputs = inputs_query.values()
+
+        let object = {};
+
+        for (let input of inputs) {
+            object[input.name] = input.value;
+        }
+
+        let json = JSON.stringify(object);
+
+        console.log(json);
+    }
+
+    async function add_ingredient()
+</script>
+</html>
