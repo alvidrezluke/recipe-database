@@ -1,52 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>New Recipe</title>
-</head>
-<body>
-    <h1>You provided a GET request to the new-recipe page!</h1>
-    <form id="recipe-form">
-        <label for="title">Title</label>
-        <input name="title" id="title" />
-        <label for="description">Description</label>
-        <textarea name="description" id="description"></textarea>
+	<head>
+		<meta charset="UTF-8" />
+		<title>New Recipe</title>
+	</head>
+	<body>
+		<h1>You provided a GET request to the new-recipe page!</h1>
+		<form id="recipe-form">
+			<label for="title">Title</label>
+			<input name="title" id="title" />
+			<label for="description">Description</label>
+			<textarea id="description"></textarea>
 
-        <div id="ingredient-container">
-            <h2>Ingredients:</h2>
-            <input class="ingredient" id="ingredient-1">
-            <button>x</button>
-            <button>+</button>
-        </div>
-        <button type="submit">Submit</button>
-    </form>
-</body>
-<script>
-    const form = document.querySelector('#recipe-form');
-    form.addEventListener('submit', handleSubmit);
+			<fieldset id="ingredient-container">
+				<legend>Ingredients:</legend>
+				<input class="ingredient" />
+			</fieldset>
+			<button onclick="add_ingredient()" type="button">+</button>
+			<button type="submit">Submit</button>
+		</form>
+	</body>
+	<script>
+		const form = document.querySelector('#recipe-form');
+		form.addEventListener('submit', handleSubmit);
 
-    async function handleSubmit(e) {
-        e.preventDefault();
+		async function handleSubmit(e) {
+			e.preventDefault();
 
-        let form = e.currentTarget;
+			const url = form.action;
 
-        let children = form.elements;
+			const title_input = document.getElementById('title');
+			const description_input = document.getElementById('description');
+			const ingredient_inputs = document.getElementsByClassName('ingredient');
 
-        const inputs_query = document.querySelectorAll("input");
+			let ingredient_values = [];
 
-        let inputs = inputs_query.values()
+			for (let ingredient of ingredient_inputs) {
+				ingredient_values.push(ingredient.value);
+			}
 
-        let object = {};
+			let data = {
+				title: title_input.value,
+				description: description_input.value,
+				ingredients: ingredient_values,
+			};
 
-        for (let input of inputs) {
-            object[input.name] = input.value;
-        }
+			let json = JSON.stringify(data);
 
-        let json = JSON.stringify(object);
+			let fetchOptions = {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					Accept: 'application/json',
+				},
+				body: json,
+			};
 
-        console.log(json);
-    }
+			let res = await fetch(url, fetchOptions);
 
-    async function add_ingredient()
-</script>
+			if (!res.ok) {
+				let error = await res.text();
+				throw new Error(error);
+			}
+			return res.json();
+		}
+
+		async function add_ingredient() {
+			let ingredient_container = document.getElementById(
+				'ingredient-container'
+			);
+
+			let new_ingredient_input = document.createElement('input');
+			new_ingredient_input.className = 'ingredient';
+
+			ingredient_container.appendChild(new_ingredient_input);
+		}
+	</script>
 </html>
