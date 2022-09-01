@@ -1,16 +1,14 @@
-
 #[derive(Debug)]
 struct Recipe {
-    id: String,
     title: String,
     description: String,
     ingredients: Vec<Ingredient>,
-    instructions: String,
-    servings: u32,
+    servings: String,
 }
 
 #[derive(Debug)]
-struct Ingredient {
+pub struct Ingredient {
     item: String,
+    measurement: String,
     quantity: f32
 }

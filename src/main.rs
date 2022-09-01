@@ -26,7 +26,6 @@ async fn manual_hello() -> impl Responder {
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     dotenv::dotenv().ok();
-    init_db().await.expect("Uh oh.");
     HttpServer::new(|| {
         App::new()
             .service(Files::new("/images", "static/images/").show_files_listing())

@@ -9,12 +9,14 @@
 		<form id="recipe-form">
 			<label for="title">Title</label>
 			<input name="title" id="title" />
+			<label for="servings">Servings</label>
+			<input name="servings" id="servings" />
 			<label for="description">Description</label>
 			<textarea id="description"></textarea>
 
 			<fieldset id="ingredient-container">
 				<legend>Ingredients:</legend>
-				<input class="ingredient" />
+				<label><input class="ingredient" /></label>
 			</fieldset>
 			<button onclick="add_ingredient()" type="button">+</button>
 			<button type="submit">Submit</button>
@@ -30,6 +32,7 @@
 			const url = form.action;
 
 			const title_input = document.getElementById('title');
+			const servings_input = document.getElementById('servings');
 			const description_input = document.getElementById('description');
 			const ingredient_inputs = document.getElementsByClassName('ingredient');
 
@@ -41,6 +44,7 @@
 
 			let data = {
 				title: title_input.value,
+				servings: servings_input.value,
 				description: description_input.value,
 				ingredients: ingredient_values,
 			};
@@ -56,7 +60,7 @@
 				body: json,
 			};
 
-			let res = await fetch(url, fetchOptions);
+			let res = await fetch("/new-recipe", fetchOptions);
 
 			if (!res.ok) {
 				let error = await res.text();
